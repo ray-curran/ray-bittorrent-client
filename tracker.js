@@ -3,7 +3,7 @@
 const dgram = require('dgram');
 const Buffer = require('buffer').Buffer;
 const urlParse = require('url').parse;
-
+const crypto = require('crypto');
 const torrentParser = require('./torrent-parser');
 const util = require ('./util');
 
@@ -32,14 +32,14 @@ module.exports.getPeers = (torrent, callback) => {
 
 function udpSend(socket, message, rawUrl, callback=()=>{}) {
   const url = urlParse(rawUrl);
-  socket.send(message, 0, message.length, url.port, url.host, callback);
+  socket.send(message, 0, message.length, url.port, url.hostname, callback);
 }
 
 function respType(resp) {
-  // ...
+  const action = resp.readUInt32BE(0);
+  if (action === 0) return 'connect';
+  if (action === 1) return 'announce';
 }
-
-const crypto = require('crypto');
 
 function buildConnReq() {
   const buf = Buffer.alloc(16);
