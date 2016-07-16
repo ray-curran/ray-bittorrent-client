@@ -12,10 +12,10 @@ module.exports = class {
   queue(pieceIndex) {
     const nBlocks = tp.blocksPerPiece(this._torrent, pieceIndex);
     for (let i = 0; i < nBlocks; i++) {
-      const PieceBlock = {
+      const pieceBlock = {
         index: pieceIndex,
         begin: i * tp.BLOCK_LEN,
-        length: this.blockLen(this._torrent, pieceIndex, i)
+        length: tp.blockLen(this._torrent, pieceIndex, i)
       };
       this._queue.push(pieceBlock);
     }
@@ -23,7 +23,7 @@ module.exports = class {
 
   deque() { return this._queue.shift(); }
 
-  peek() { return this._queue[0];  }
+  peek() { return this._queue[0]; }
 
-  length() { return this._queue.length;  }
-}
+  length() { return this._queue.length; }
+};
